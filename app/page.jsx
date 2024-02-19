@@ -1,6 +1,6 @@
 function HomePage() {
   return (
-    <div className="">Welcome to cheff connect</div>
+    <div className="text-2xl">Welcome to cheff connect</div>
   )
 }
 
