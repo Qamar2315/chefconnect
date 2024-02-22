@@ -1,5 +1,7 @@
 import '@styles/globals.css'
 import Nav from '@components/Nav'
+import Footer from '@components/Footer'
+import Provider from '@components/Provider'
 
 export const metadata = {
   title: 'ChefConnect',
@@ -10,10 +12,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <main className='app'>
-          <Nav/>
-          {children}
-        </main>
+        <Provider>
+          <main>
+            <Nav />
+            {children}
+            <Footer />
+          </main>
+        </Provider>
       </body>
     </html>
   )

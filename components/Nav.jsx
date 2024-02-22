@@ -7,6 +7,14 @@ import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
 
 function Nav() {
     const isUserLoggedIn = true;
+    const [providers, setProviders] = useState(null);
+    useEffect(() => {
+        (async () => {
+            const res = await getProviders();
+            setProviders(res);
+        })();
+    }, []);
+
     return (
         <nav className='w-full flex justify-between'>
             <Image
@@ -28,11 +36,30 @@ function Nav() {
                         <div className='w-1/3 flex justify-around'>
                             <Link href='/recipes' className='text-blue-500 hover:text-blue-700'>Recipes</Link>
                             <Link href='/about' className='text-blue-500 hover:text-blue-700'>About Us</Link>
+                            <Link href='/login' className='text-blue-500 hover:text-blue-700'>Sign Up</Link>
                             <Link href='/login' className='text-blue-500 hover:text-blue-700'>Login</Link>
                         </div>
                     )
-                }
 
+                }
+                {
+                    !isUserLoggedIn &&
+                    <>
+                        {providers &&
+                            Object.values(providers).map((provider) => (
+                                <button
+                                    type='button'
+                                    key={provider.name}
+                                    onClick={() => {
+                                        signIn(provider.id);
+                                    }}
+                                    className='black_btn'
+                                >
+                                    Sign in
+                                </button>
+                            ))}
+                    </>
+                }
             </div>
         </nav>
     )
