@@ -10,8 +10,8 @@ function Nav() {
             <Image
                 src='/assets/logo.png'
                 alt='logo'
-                width={150}
-                height={150}
+                width={100}
+                height={100}
             />
             <div className='w-full flex justify-end' >
                 {
@@ -26,7 +26,7 @@ function Nav() {
                         <div className='w-1/3 flex justify-around  mt-10'>
                             <Link href='/recipes' className='text-blue-500 hover:text-blue-700'>Recipes</Link>
                             <Link href='/about' className='text-blue-500 hover:text-blue-700'>About Us</Link>
-                            <Link href='/login' className='text-blue-500 hover:text-blue-700'>Sign Up</Link>
+                            <Link href='/sign-up' className='text-blue-500 hover:text-blue-700'>Sign Up</Link>
                             <Link href='/login' className='text-blue-500 hover:text-blue-700'>Login</Link>
                         </div>
                     )
