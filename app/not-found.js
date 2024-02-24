@@ -1,4 +1,7 @@
+"use client"
+
 import React from 'react'
+import Link from 'next/link';
 
 function page() {
   return (
@@ -8,8 +11,7 @@ function page() {
         Looks like you stumbled upon a page that doesn't exist. Don't worry, we'll help you find what you're looking for.
       </p>
       <div className="mt-8 flex flex-col sm:flex-row gap-4">
-        <a href="/" className="btn btn-primary">Go Home</a>
-        <a href="/search" className="btn btn-outline">Search for Something Else</a>
+        <Link href="/" className="btn btn-primary">Go Home</Link>
       </div>
     </div>
   )

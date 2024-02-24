@@ -4,15 +4,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 function Nav() {
-    const isUserLoggedIn = false;
+    const isUserLoggedIn = true;
     return (
         <nav className='w-full flex justify-between'>
-            <Image
-                src='/assets/logo.png'
-                alt='logo'
-                width={100}
-                height={100}
-            />
+            <Link href='/' >
+                <Image
+                    src='/assets/logo.png'
+                    alt='logo'
+                    width={100}
+                    height={100}
+                />
+            </Link>
             <div className='w-full flex justify-end' >
                 {
                     isUserLoggedIn ? (
