@@ -3,8 +3,11 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 function Page() {
+    const router = useRouter();
     const initialValues = {
         title: '',
         description: '',
@@ -29,10 +32,21 @@ function Page() {
         tags: Yup.string().required()
     });
 
-    const onSubmit = (values, { resetForm }) => {
-        console.log(values);
+    const onSubmit = async (values, { resetForm }) => {
+        values.ingredients= values.ingredients.split(',')
+        values.instructions= values.instructions.split(',')
+        values.tags= values.tags.split(',')
         // You can handle form submission here, e.g., send data to server
-        // resetForm(); // Reset form after submission
+        try {
+            const response = await Axios.post('/api/recipes', values);
+            console.log('Recipe submitted successfully:', response.data);
+            router.push('/recipes');
+            // resetForm(); // Reset the form after successful submission
+        } catch (error) {
+            console.error('Error submitting recipe:', error);
+            // Handle submission errors appropriately, e.g., display user feedback
+        }
+
     };
 
     return (
