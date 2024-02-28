@@ -1,6 +1,7 @@
 import '@styles/globals.css';
 import Nav from '@components/Nav';
 import Footer from '@components/Footer';
+import AuthProvider from '@components/AuthProvider';
 
 export const metadata = {
   title: 'ChefConnect',
@@ -11,13 +12,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <main>
-          <Nav />
-          {children}
-          <Footer />
-        </main>
-      </body>
+      <AuthProvider>
+        <body>
+          <main>
+            <Nav />
+            {children}
+            <Footer />
+          </main>
+        </body>
+      </AuthProvider>
     </html>
   )
 }

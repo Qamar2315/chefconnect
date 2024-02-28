@@ -2,12 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react'
 
 function RecipePage({ params }) {
     const router = useRouter();
     const recipeId = params?.id;
     const [recipe, setRecipe] = useState(null);
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect(`/api/auth/signin?callbackUrl=/recipes/${recipeId}`)
+        }
+    });
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -58,8 +65,8 @@ function RecipePage({ params }) {
             <p className="mb-4"><span className='font-semibold' >Cooking Time: </span>{recipe.cookingTime} minutes</p>
             <p className="mb-4"><span className='font-semibold' >Servings: </span>{recipe.servings}</p>
             <p className="mb-4"><span className='font-semibold' >Author: </span> {recipe.author}</p>
-            {recipe.category && <p className="mb-4"><span className='font-semibold' >Category: </span> 
-            {recipe.category}
+            {recipe.category && <p className="mb-4"><span className='font-semibold' >Category: </span>
+                {recipe.category}
             </p>}
             {recipe.tags.length > 0 && (
                 <div className="mb-4">
@@ -69,6 +76,17 @@ function RecipePage({ params }) {
                             <span key={index} className="bg-gray-200 rounded-full px-2 py-1 text-sm mr-2 mb-2">{tag}</span>
                         ))}
                     </div>
+                </div>
+            )}
+            {/* Conditionally render edit and delete buttons if user matches recipe author */}
+            {recipe && recipe.author === session?.user?.name && (
+                <div className="my-4">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                        Edit
+                    </button>
+                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Delete
+                    </button>
                 </div>
             )}
         </div>

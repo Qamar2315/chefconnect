@@ -7,7 +7,6 @@ import Axios from 'axios';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
-
   useEffect(() => {
     const fetchRecipes = async () => {
       const response = await Axios.get("/api/recipes");
