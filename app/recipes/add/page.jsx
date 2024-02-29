@@ -4,10 +4,17 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
+import { useSession } from 'next-auth/react'
 
 function Page() {
     const router = useRouter();
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect('/api/auth/signin?callbackUrl=/recipes/add')
+        }
+    });
     const initialValues = {
         title: '',
         description: '',
@@ -15,7 +22,6 @@ function Page() {
         instructions: [],
         cookingTime: '',
         servings: '',
-        author: '',
         category: '',
         tags: [],
     };
@@ -27,7 +33,6 @@ function Page() {
         instructions: Yup.string().required(),
         cookingTime: Yup.number().required('Cooking Time is required').min(0, 'Cooking Time must be greater than or equal to 0').max(120,"Cooking Time must be less than or equal to 120 minutes"),
         servings: Yup.number().required('Servings is required').min(1, 'Servings must be greater than 0').max(8,"Servings must be greater than 8"),
-        author: Yup.string().required('Author is required'),
         category: Yup.string(),
         tags: Yup.string().required()
     });
@@ -36,9 +41,13 @@ function Page() {
         values.ingredients= values.ingredients.split(',')
         values.instructions= values.instructions.split(',')
         values.tags= values.tags.split(',')
+        const data= {
+            formData:values,
+            userData:session.user
+        }
         // You can handle form submission here, e.g., send data to server
         try {
-            const response = await Axios.post('/api/recipes', values);
+            const response = await Axios.post('/api/recipes', data);
             console.log('Recipe submitted successfully:', response.data);
             router.push('/recipes');
             // resetForm(); // Reset the form after successful submission
@@ -93,13 +102,6 @@ function Page() {
                         <label htmlFor="servings" className="block text-gray-700 font-bold mb-2">Servings</label>
                         <Field type="number" id="servings" name="servings" className="form-input w-full border border-black p-1" placeholder="enter number of servings" />
                         <ErrorMessage name="servings" component="div" className="text-red-500 mt-1" />
-                    </div>
-
-                    {/* Author */}
-                    <div className="mb-4">
-                        <label htmlFor="author" className="block text-gray-700 font-bold mb-2">Author</label>
-                        <Field type="text" id="author" name="author" className="form-input w-full border border-black p-1" placeholder="your name" />
-                        <ErrorMessage name="author" component="div" className="text-red-500 mt-1" />
                     </div>
 
                     {/* Category */}

@@ -28,6 +28,7 @@ export const config = {
     "/admin",
     "/api/users",
     "/api/recipes",
-    "/api/recipes/:path*"
+    "/api/recipes/:path*",
+    "/recipie/add"
   ]
 };

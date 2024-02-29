@@ -1,6 +1,7 @@
 // pages/api/recipes.js
 import dbConnect from '@utils/connectDB';
 import Recipe from '@models/recepie';
+import User from '@models/user';
 import { NextResponse } from 'next/server'
 
 export async function GET(req, res) {
@@ -8,7 +9,7 @@ export async function GET(req, res) {
     await dbConnect();
     const recipes = await Recipe.find({});
     return NextResponse.json(
-      recipes 
+      recipes
     )
   } catch (error) {
     console.error(error);
@@ -23,10 +24,19 @@ export async function GET(req, res) {
 export async function POST(req, res) {
   try {
     await dbConnect();
-    const data = await req.json();
+    let data = await req.json();
+    const user = await User.findOne({ email: data.userData.email });
+    if (!user) {
+      return NextResponse.json({
+        status: 500,
+        error: "User Not Found" // Provide a more informative error message
+      });
+    }
+    data.formData.author = user._id;
+    // Use Mongoose's create method to save to database
     const newRecipe = await Recipe.create(
-      data
-    ); // Use Mongoose's create method to save to database
+      data.formData
+    );
     return NextResponse.json({
       message: "Recipe created successfully",
       recipe: newRecipe // Optionally include the created recipe in the response
