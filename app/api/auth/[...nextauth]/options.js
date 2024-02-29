@@ -46,7 +46,7 @@ export const options = {
               console.log("Good Pass");
               delete foundUser.password;
 
-              foundUser["role"] = "Simple User";
+              foundUser["role"] = "user";
               return foundUser;
             }
           }

@@ -3,10 +3,14 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(req) {
-    console.log(req.nextUrl.pathname);
-    console.log(req.nextauth.token.role);
     if (
-      req.nextUrl.pathname.startsWith("/recipes/add") &&
+      req.nextUrl.pathname.startsWith("/admin") &&
+      req.nextauth.token.role != "admin"
+    ) {
+      return NextResponse.rewrite(new URL("/not-authorized", req.url));
+    }
+    if (
+      req.nextUrl.pathname.startsWith("/api/users") &&
       req.nextauth.token.role != "admin"
     ) {
       return NextResponse.rewrite(new URL("/not-authorized", req.url));
@@ -19,4 +23,4 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ["/recipes/add"] };
+export const config = { matcher: ["/admin","/api/users"]};
