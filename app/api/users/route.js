@@ -6,8 +6,10 @@ import { NextResponse } from 'next/server';
 export async function POST(req, res) {
     try {
         await dbConnect();
-        const data = await req.json();
+        let data = await req.json();
+        data.recipes=[]
         const user = await User.create(data);
+        console.log(user);
         return NextResponse.json({ success: true, data: user });
     } catch (error) {
         console.error(error);

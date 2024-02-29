@@ -25,18 +25,25 @@ export async function POST(req, res) {
   try {
     await dbConnect();
     let data = await req.json();
-    const user = await User.findOne({ email: data.userData.email });
+    let user = await User.findOne({ email: data.userData.email });
+
     if (!user) {
       return NextResponse.json({
         status: 500,
         error: "User Not Found" // Provide a more informative error message
       });
     }
+
     data.formData.author = user._id;
     // Use Mongoose's create method to save to database
+
     const newRecipe = await Recipe.create(
       data.formData
     );
+    
+    user.recipes.push(newRecipe);
+    await user.save();
+
     return NextResponse.json({
       message: "Recipe created successfully",
       recipe: newRecipe // Optionally include the created recipe in the response

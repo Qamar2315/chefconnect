@@ -21,7 +21,6 @@ function UserForm() {
 
   const handleSubmit = async  (e) => {
     e.preventDefault();
-    console.log(formData);
     // You can send the form data to a server, perform validation, etc.
     try {
       const response = await Axios.post('/api/users', formData);
