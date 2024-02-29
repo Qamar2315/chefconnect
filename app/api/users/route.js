@@ -2,6 +2,7 @@ import dbConnect from '@utils/connectDB';
 import User from '@models/user';
 import { NextResponse } from 'next/server';
 
+
 export async function POST(req, res) {
     try {
         await dbConnect();
@@ -20,7 +21,6 @@ export async function POST(req, res) {
 export async function GET(req, res) {
     try {
         await dbConnect();
-        
         const users = await User.find({});
         return NextResponse.json({ success: true, data: users });
     } catch (error) {

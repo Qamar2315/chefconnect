@@ -23,4 +23,11 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ["/admin","/api/users"]};
+export const config = {
+  matcher: [
+    "/admin",
+    "/api/users",
+    "/api/recipes",
+    "/api/recipes/:path*"
+  ]
+};
