@@ -11,8 +11,9 @@ export default withAuth(
     }
     if (
       req.nextUrl.pathname.startsWith("/api/users") &&
+      req.method === "GET" &&
       req.nextauth.token.role != "admin"
-    ) {
+    ){
       return NextResponse.rewrite(new URL("/not-authorized", req.url));
     }
   },

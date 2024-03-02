@@ -23,15 +23,14 @@ function UserForm() {
     e.preventDefault();
     // You can send the form data to a server, perform validation, etc.
     try {
-      const response = await Axios.post('/api/users', formData);
-      console.log('User registered successfully:', response.data);
+      const res= await Axios.post('/api/users/add', formData);
       router.push('/');
+      console.log(res.data);
       // resetForm(); // Reset the form after successful submission
     } catch (error) {
       console.error('Error submitting recipe:', error);
       // Handle submission errors appropriately, e.g., display user feedback
     }
-
   };
 
   return (

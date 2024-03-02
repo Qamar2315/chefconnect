@@ -7,6 +7,7 @@ export async function GET(req, {params}) {
     try {
         await dbConnect();
         const recipe = await Recipe.findById(id);
+        await recipe.populate("author");
         if (!recipe) {
             return NextResponse.json({
                 status: 404,

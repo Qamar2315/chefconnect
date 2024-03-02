@@ -1,6 +1,7 @@
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from '@models/user';
+import dbConnect from "@utils/connectDB";
 
 export const options = {
   providers: [
@@ -34,6 +35,7 @@ export const options = {
       },
       async authorize(credentials) {
         try {
+          await dbConnect();
           const foundUser = await User.findOne({ email: credentials.email })
             .lean()
             .exec();

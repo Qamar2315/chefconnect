@@ -64,7 +64,7 @@ function RecipePage({ params }) {
             </div>
             <p className="mb-4"><span className='font-semibold' >Cooking Time: </span>{recipe.cookingTime} minutes</p>
             <p className="mb-4"><span className='font-semibold' >Servings: </span>{recipe.servings}</p>
-            <p className="mb-4"><span className='font-semibold' >Author: </span> {recipe.author}</p>
+            <p className="mb-4"><span className='font-semibold' >Author: </span> {recipe.author?.name}</p>
             {recipe.category && <p className="mb-4"><span className='font-semibold' >Category: </span>
                 {recipe.category}
             </p>}
