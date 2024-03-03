@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import {getServerSession} from 'next-auth';
+import { getServerSession } from 'next-auth';
 import { options } from '@app/api/auth/[...nextauth]/options';
 
 async function Nav() {
     const session = await getServerSession(options);
-    // console.log(session);
     return (
         <nav className='w-full flex justify-between'>
             <Link href='/' >
@@ -23,7 +22,7 @@ async function Nav() {
                         <div className='w-1/3 flex justify-around mt-10'>
                             <Link href='/recipes/add' className='text-blue-500 hover:text-blue-700'>Add Recipe</Link>
                             <Link href='/recipes' className='text-blue-500 hover:text-blue-700'>Recipes</Link>
-                            <Link href='/profile' className='text-blue-500 hover:text-blue-700'>Profile</Link>
+                            <Link href={`/profile/${session.user.user_id}`} className='text-blue-500 hover:text-blue-700'>Profile</Link>
                             <Link href='/api/auth/signout?callbackUrl=/' className='text-blue-500 hover:text-blue-700'>Logout</Link>
                         </div>
                     ) : (

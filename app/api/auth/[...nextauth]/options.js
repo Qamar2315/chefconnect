@@ -47,7 +47,8 @@ export const options = {
             if (match) {
               console.log("Good Pass");
               delete foundUser.password;
-
+              delete foundUser.recipes;
+              foundUser["user_id"] = foundUser._id;
               foundUser["role"] = "user";
               return foundUser;
             }
@@ -61,11 +62,17 @@ export const options = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.role = user.role;
+      if (user) {
+        token.role = user.role;
+        token.user_id = user.user_id;
+      }
       return token;
     },
     async session({ session, token }) {
-      if (session?.user) session.user.role = token.role;
+      if (session?.user){
+        session.user.role = token.role;
+        session.user.user_id = token.user_id;
+      } 
       return session;
     },
   },
