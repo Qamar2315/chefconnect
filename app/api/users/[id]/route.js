@@ -23,3 +23,25 @@ export async function GET(req, { params }) {
         });
     }
 }
+
+export async function PUT(req, { params }) {
+    const id = params.id;
+    const data = await req.json();
+    try {
+        await dbConnect();
+        const user = await User.findByIdAndUpdate(id, data, { new: true });
+        if (!user) {
+            return NextResponse.json({
+                status: 404,
+                message: 'User not found',
+            });
+        }
+        return NextResponse.json(user);
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({
+            status: 500,
+            message: 'Internal server error',
+        });
+    }
+}

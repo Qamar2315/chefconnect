@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import RecipeCard from '@components/RecipeCard';
 
 function ProfilePage({ params }) {
   const { id } = params;
@@ -17,9 +19,6 @@ function ProfilePage({ params }) {
       redirect(`/api/auth/signin?callbackUrl=/profile/${id}`);
     }
   });
-  
-  console.log(session);
-
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -58,19 +57,38 @@ function ProfilePage({ params }) {
   }
 
   return (
-    <div className="bg-gradient-to-r from-sky-500 to-indigo-500 h-screen flex flex-col items-center justify-center">
+    <div className="bg-gradient-to-r from-sky-400 to-indigo-400 h-screen flex flex-col items-center justify-center">
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-4xl font-bold text-white">Profile Information</h1>
         <div className="mt-8">
           <p className="text-2xl text-white"><strong>Name:</strong> {userData.name}</p>
           <p className="text-2xl text-white"><strong>Email:</strong> {userData.email}</p>
-          <h2 className="text-3xl font-bold mt-8 mb-4 text-white">User Recipes</h2>
+          <br />
+          {session && session.user.user_id === userData._id && (
+            <Link href={`/profile/${session.user.user_id}/edit`} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-10">
+              Edit Profile
+            </Link>
+          )}
           {userRecipes.length > 0 ? (
-            <ul className="text-left">
-              {userRecipes.map((recipe, index) => (
-                <li key={index} className="text-xl text-white">{recipe.title}</li>
-              ))}
-            </ul>
+            <div className="container mx-auto px-4 py-8">
+              <h1 className="text-3xl font-bold mb-8">{userData.name} Recipes</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {userRecipes.map((recipe) => (
+                  <div key={recipe._id}>
+                    <Link href={`/recipes/${recipe._id}`} >
+                      <RecipeCard key={recipe._id} recipe={recipe} />
+                    </Link>
+                    {
+                      userData?._id === session?.user?.user_id && (
+                        <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                          Delete Recipe?
+                        </button>
+                      )
+                    }
+                  </div>
+                ))}
+              </div>
+            </div>
           ) : (
             <p className="text-xl text-white">No recipes found.</p>
           )}

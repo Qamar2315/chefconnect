@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { redirect, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react'
+import Link from 'next/link';
 
 function RecipePage({ params }) {
     const router = useRouter();
@@ -64,7 +65,7 @@ function RecipePage({ params }) {
             </div>
             <p className="mb-4"><span className='font-semibold' >Cooking Time: </span>{recipe.cookingTime} minutes</p>
             <p className="mb-4"><span className='font-semibold' >Servings: </span>{recipe.servings}</p>
-            <p className="mb-4"><span className='font-semibold' >Author: </span> {recipe.author?.name}</p>
+            <p className="mb-4"><span className='font-semibold' >Author: </span> <Link href={`/profile/${recipe?.author?._id}`} >{recipe.author?.name}</Link></p>
             {recipe.category && <p className="mb-4"><span className='font-semibold' >Category: </span>
                 {recipe.category}
             </p>}
@@ -79,7 +80,7 @@ function RecipePage({ params }) {
                 </div>
             )}
             {/* Conditionally render edit and delete buttons if user matches recipe author */}
-            {recipe && recipe.author === session?.user?.name && (
+            {recipe && recipe?.author?._id === session?.user?.user_id && (
                 <div className="my-4">
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
                         Edit

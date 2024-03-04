@@ -5,6 +5,7 @@ import { options } from '@app/api/auth/[...nextauth]/options';
 
 async function Nav() {
     const session = await getServerSession(options);
+    console.log(session);
     return (
         <nav className='w-full flex justify-between'>
             <Link href='/' >
