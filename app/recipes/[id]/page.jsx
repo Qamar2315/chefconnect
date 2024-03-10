@@ -82,9 +82,9 @@ function RecipePage({ params }) {
             {/* Conditionally render edit and delete buttons if user matches recipe author */}
             {recipe && recipe?.author?._id === session?.user?.user_id && (
                 <div className="my-4">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                    <Link href={`/recipes/${recipe._id}/edit`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
                         Edit
-                    </button>
+                    </Link>
                     <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Delete
                     </button>
