@@ -33,6 +33,22 @@ function RecipePage({ params }) {
         router.back();
     };
 
+    const deleteRecipe = async () => {
+        // You can handle form submission here, e.g., send data to server
+        try {
+            const answer = confirm(`${session?.user?.name}, are you sure you want to delete the recipe?`)
+            if(answer){
+                const response = await axios.delete(`/api/recipes/${recipe._id}`);
+                router.push('/recipes');
+                alert("Recipe deleted sucessfully")
+            }
+        } catch (error) {
+            alert('Error submitting recipe:', error)
+            console.error('Error submitting recipe:', error);
+            // Handle submission errors appropriately, e.g., display user feedback
+        }
+    };
+
     if (!recipe) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -85,7 +101,7 @@ function RecipePage({ params }) {
                     <Link href={`/recipes/${recipe._id}/edit`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
                         Edit
                     </Link>
-                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <button onClick={() => { deleteRecipe(recipe._id); }} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Delete
                     </button>
                 </div>

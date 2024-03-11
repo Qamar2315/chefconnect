@@ -46,11 +46,13 @@ function EditRecipieForm({ recipe }) {
 
         // You can handle form submission here, e.g., send data to server
         try {
-            const response = await Axios.put(`/api/recipes/${recipe._id}/edit`, values);
+            const response = await Axios.put(`/api/recipes/${recipe._id}`, values);
             console.log('Recipe submitted successfully:', response.data);
-            // router.push('/recipes');
-            // resetForm(); // Reset the form after successful submission
+            resetForm(); // Reset the form after successful submission
+            router.push('/recipes');
+            alert("Recipe updated sucessfully")
         } catch (error) {
+            alert('Error submitting recipe:', error)
             console.error('Error submitting recipe:', error);
             // Handle submission errors appropriately, e.g., display user feedback
         }
