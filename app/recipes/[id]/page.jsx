@@ -38,14 +38,16 @@ function RecipePage({ params }) {
         try {
             const answer = confirm(`${session?.user?.name}, are you sure you want to delete the recipe?`)
             if(answer){
-                const response = await axios.delete(`/api/recipes/${recipe._id}`);
+                const response = await axios.delete(`/api/recipes/${recipe._id}?author_id=${recipe?.author?._id}`);
+                // console.log(response.data);
                 router.push('/recipes');
                 alert("Recipe deleted sucessfully")
             }
         } catch (error) {
             alert('Error submitting recipe:', error)
-            console.error('Error submitting recipe:', error);
+            console.error('Error submitting recipe:', error.message);
             // Handle submission errors appropriately, e.g., display user feedback
+
         }
     };
 
