@@ -2,24 +2,48 @@
 
 import React, { useState, useEffect } from 'react';
 import Review from '@components/Review';
+import axios from "axios";
 
-const Reviews = ({ initialReviews }) => {
-    const [reviews, setReviews] = useState(initialReviews || [{rating:1,description:"good",author:{"name":"Qamar"}}]);
+const Reviews = ({ recipe, session }) => {
+    const [reviews, setReviews] = useState(recipe.reviews);
     const [newRating, setNewRating] = useState(0);
     const [newComment, setNewComment] = useState('');
 
-    const handleAddReview = (e) => {
+    const handleAddReview = async (e) => {
         e.preventDefault();
+
         if (newRating > 0 && newComment.trim() !== '') {
-            setReviews([...reviews, { rating: newRating, comment: newComment }]);
-            setNewRating(0);
-            setNewComment('');
+            const review = { rating: newRating, description: newComment, author: `${session?.user?.user_id}` };
+            try {
+                const response = await axios.post(`/api/recipes/${recipe._id}/reviews`, review);
+                console.log('Review added successfully:', response.data); // Optional: Log the response data
+                
+                setReviews([...reviews, response.data.review]); // Update state with the review data from response
+                setNewRating(0);
+                setNewComment('');
+
+            } catch (error) {
+                console.error('Error adding review:', error);
+                alert("Error happend while adding recipe")
+                // Handle errors appropriately (e.g., display an error message to the user)
+            }
         }
     };
 
-    const handleDeleteReview = (index) => {
-        setReviews(reviews.filter((_, i) => i !== index));
-    };
+    const handleDeleteReview = async (index) => {
+        try {
+          const reviewIdToDelete = reviews[index]._id; // Assuming your review objects have an _id field
+          // Send Axios delete request to delete the review
+          await axios.delete(`/api/recipes/${recipe._id}/reviews/${reviewIdToDelete}`);
+
+          // Update the local state to remove the deleted review
+          setReviews(reviews.filter((_, i) => i !== index));
+        } catch (error) {
+          console.error('Error deleting review:', error);
+          // Handle error if needed
+          alert("Error:", error)
+        }
+      };
 
     return (
         <div className="flex flex-col space-y-4">
@@ -27,12 +51,21 @@ const Reviews = ({ initialReviews }) => {
             <div className="overflow-y-auto max-h-96 border border-gray-200 rounded-md p-4">
                 {reviews.length === 0 && <p>No reviews yet.</p>}
                 {reviews.map((review, index) => (
-                    <Review
-                        key={index}
-                        {...review}
-                        author={ "qamar" }
-                        onDelete={() => handleDeleteReview(index)}
-                    />
+                    review?.author?._id === session?.user?.user_id ?
+                        <Review
+                            key={index}
+                            rating={review?.rating}
+                            comment={review?.description}
+                            author={review?.author?.name}
+                            onDelete={() => handleDeleteReview(index)}
+                        />
+                        :
+                        <Review
+                            key={index}
+                            rating={review?.rating}
+                            comment={review?.description}
+                            author={review?.author?.name}
+                        />
                 ))}
             </div>
             <form onSubmit={handleAddReview} className="flex items-center">

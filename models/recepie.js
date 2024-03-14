@@ -47,9 +47,13 @@ const recipeSchema = new mongoose.Schema({
   tags: {
     type: [String], // Optional field for adding tags to recipes
   },
-  reviews: [{ type: mongoose.Schema.Types.ObjectId,ref: 'Review' }]
+  reviews: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Review',
+    default: []
+  }]
 });
 
 
-const Recipe= mongoose.models?.Recipe || mongoose.model('Recipe', recipeSchema);
-module.exports =Recipe;
+const Recipe = mongoose.models?.Recipe || mongoose.model('Recipe', recipeSchema);
+module.exports = Recipe;

@@ -14,16 +14,16 @@ export default withAuth(
           return NextResponse.redirect(new URL('/not-authorized',req.url))
         }
       }
-      if (req.method == 'DELETE') {
-        // Allow deletion of any recipe by the author of recipe
-        const isAuthorized = req?.nextauth?.token?.user_id === req.nextUrl.searchParams.get('author_id');
-        // const isAuthorized = false;
-        if(isAuthorized){
-          return NextResponse.next();
-        }else{
-          return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-        }
-      }
+      // if (req.method == 'DELETE') {
+      //   // Allow deletion of any recipe by the author of recipe
+      //   const isAuthorized = req?.nextauth?.token?.user_id === req.nextUrl.searchParams.get('author_id');
+      //   // const isAuthorized = false;
+      //   if(isAuthorized){
+      //     return NextResponse.next();
+      //   }else{
+      //     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      //   }
+      // }
     } else if (req.nextUrl.pathname.startsWith('/api/users')) {
       if (req.method == 'PUT') {
         const data = await req.json();
