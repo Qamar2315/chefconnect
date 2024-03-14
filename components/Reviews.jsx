@@ -17,7 +17,7 @@ const Reviews = ({ recipe, session }) => {
             try {
                 const response = await axios.post(`/api/recipes/${recipe._id}/reviews`, review);
                 console.log('Review added successfully:', response.data); // Optional: Log the response data
-                
+
                 setReviews([...reviews, response.data.review]); // Update state with the review data from response
                 setNewRating(0);
                 setNewComment('');
@@ -32,18 +32,17 @@ const Reviews = ({ recipe, session }) => {
 
     const handleDeleteReview = async (index) => {
         try {
-          const reviewIdToDelete = reviews[index]._id; // Assuming your review objects have an _id field
-          // Send Axios delete request to delete the review
-          await axios.delete(`/api/recipes/${recipe._id}/reviews/${reviewIdToDelete}`);
-
-          // Update the local state to remove the deleted review
-          setReviews(reviews.filter((_, i) => i !== index));
+            const reviewIdToDelete = reviews[index]._id; // Assuming your review objects have an _id field
+            // Send Axios delete request to delete the review
+            await axios.delete(`/api/recipes/${recipe._id}/reviews/${reviewIdToDelete}/?author_id=${reviews[index]?.author?._id}`);
+            // Update the local state to remove the deleted review
+            setReviews(reviews.filter((_, i) => i !== index));
         } catch (error) {
-          console.error('Error deleting review:', error);
-          // Handle error if needed
-          alert("Error:", error)
+            console.error('Error deleting review:', error);
+            // Handle error if needed
+            alert("Error:", error)
         }
-      };
+    };
 
     return (
         <div className="flex flex-col space-y-4">
