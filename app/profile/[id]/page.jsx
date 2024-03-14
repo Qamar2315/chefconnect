@@ -5,8 +5,10 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import RecipeCard from '@components/RecipeCard';
+import { redirect, useRouter } from 'next/navigation';
 
 function ProfilePage({ params }) {
+  const router = useRouter();
   const { id } = params;
   const [userData, setUserData] = useState(null);
   const [userRecipes, setUserRecipes] = useState([]);
@@ -19,6 +21,24 @@ function ProfilePage({ params }) {
       redirect(`/api/auth/signin?callbackUrl=/profile/${id}`);
     }
   });
+
+  const deleteRecipe = async (recipe) => {
+    // You can handle form submission here, e.g., send data to server
+    try {
+      const answer = confirm(`${session?.user?.name}, are you sure you want to delete the recipe?`)
+      if (answer) {
+        const response = await axios.delete(`/api/recipes/${recipe._id}?author_id=${recipe?.author}`);
+        // console.log(response.data);
+        router.push('/recipes');
+        alert("Recipe deleted sucessfully")
+      }
+    } catch (error) {
+      alert('Error submitting recipe:', error)
+      console.error('Error submitting recipe:', error.message);
+      // Handle submission errors appropriately, e.g., display user feedback
+
+    }
+  };
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -80,7 +100,7 @@ function ProfilePage({ params }) {
                     </Link>
                     {
                       userData?._id === session?.user?.user_id && (
-                        <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                        <button onClick={() => { deleteRecipe(recipe) }} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
                           Delete Recipe?
                         </button>
                       )
