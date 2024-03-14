@@ -46,7 +46,8 @@ const recipeSchema = new mongoose.Schema({
   },
   tags: {
     type: [String], // Optional field for adding tags to recipes
-  }
+  },
+  reviews: [{ type: mongoose.Schema.Types.ObjectId,ref: 'Review' }]
 });
 
 
