@@ -1,9 +1,13 @@
-// utils/dbConnect.js
 import mongoose from 'mongoose';
 
 const dbConnect = () => {
-  // Replace with your MongoDB connection string
-  return mongoose.connect('mongodb://localhost:27017/cheff_connect_database', {
+  const mongoURI = process.env.MONGODB_URI;
+
+  if (!mongoURI) {
+    throw new Error('MongoDB connection string is not provided in the environment variables.');
+  }
+
+  return mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
