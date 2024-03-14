@@ -77,5 +77,6 @@ Feel free to explore and modify the project structure according to your requirem
 # Contributing
 We welcome contributions from the community. If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
-# License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
