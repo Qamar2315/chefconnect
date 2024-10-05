@@ -4,49 +4,61 @@ import isRecipeAuthor from "@middleware/isRecipeAuthor";
 
 export default withAuth(
   async function middleware(req) {
-    if (req.nextUrl.pathname.startsWith('/api/recipes')) {
-
-      if (req.method == 'DELETE' && req.nextUrl.pathname.includes("/reviews")) {
-        const isAuthorized = req?.nextauth?.token?.user_id === req.nextUrl.searchParams.get('author_id');
+    if (req.nextUrl.pathname.startsWith("/api/recipes")) {
+      if (req.method == "DELETE" && req.nextUrl.pathname.includes("/reviews")) {
+        const isAuthorized =
+          req?.nextauth?.token?.user_id ===
+          req.nextUrl.searchParams.get("author_id");
         // console.log(isAuthorized);
-        if(isAuthorized){
+        if (isAuthorized) {
           return NextResponse.next();
-        }else{
-          return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        } else {
+          return NextResponse.json(
+            { message: "Unauthorized" },
+            { status: 401 }
+          );
         }
         // Allow deletion of any recipe by the author of recipe
         // const isAuthorized = false;
-
       }
-      if (req.method == 'PUT') {
+      if (req.method == "PUT") {
         const data = await req.json();
-        const isAuthotrized = isRecipeAuthor(data?.author, req?.nextauth?.token?.user_id);
+        const isAuthotrized = isRecipeAuthor(
+          data?.author,
+          req?.nextauth?.token?.user_id
+        );
         if (isAuthotrized) {
           return NextResponse.next();
         } else {
-          return NextResponse.redirect(new URL('/not-authorized',req.url))
+          return NextResponse.redirect(new URL("/not-authorized", req.url));
         }
       }
-      if (req.method == 'DELETE') {
-        console.log("hitted");
+      if (req.method == "DELETE") {
         // Allow deletion of any recipe by the author of recipe
-        const isAuthorized = req?.nextauth?.token?.user_id === req.nextUrl.searchParams.get('author_id');
+        const isAuthorized =
+          req?.nextauth?.token?.user_id ===
+          req.nextUrl.searchParams.get("author_id");
         // const isAuthorized = false;
-        if(isAuthorized){
+        if (isAuthorized) {
           return NextResponse.next();
-        }else{
-          return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        } else {
+          return NextResponse.json(
+            { message: "Unauthorized" },
+            { status: 401 }
+          );
         }
       }
-    } else if (req.nextUrl.pathname.startsWith('/api/users')) {
-      if (req.method == 'PUT') {
+    } else if (req.nextUrl.pathname.startsWith("/api/users")) {
+      if (req.method == "PUT") {
         const data = await req.json();
         const isAuthotrized = data?.email === req?.nextauth?.token?.email;
         if (isAuthotrized) {
           return NextResponse.next();
         } else {
-          return NextResponse.redirect(new URL('/not-authorized', req.url))
+          return NextResponse.redirect(new URL("/not-authorized", req.url));
         }
+      } else {
+        return NextResponse.next();
       }
     } else {
       return NextResponse.next();
@@ -55,14 +67,12 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token }) => {
-        !!token
+        !!token;
       },
     },
   }
 );
 
 export const config = {
-  matcher: [
-    "/api/:path*"
-  ]
+  matcher: ["/api/:path*"],
 };

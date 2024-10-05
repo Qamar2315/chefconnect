@@ -25,7 +25,6 @@ function UserForm() {
     try {
       const res= await Axios.post('/api/users/add', formData);
       router.push('/');
-      console.log(res.data);
       // resetForm(); // Reset the form after successful submission
     } catch (error) {
       console.error('Error submitting recipe:', error);

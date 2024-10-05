@@ -6,7 +6,8 @@ export async function POST(req, res) {
     try {
         await dbConnect();
         let data = await req.json();
-        data.recipes=[]
+        data.recipes=[];
+        // console.log(data);
         const user = await User.create(data);
         return NextResponse.json({ success: true, data: user });
     } catch (error) {

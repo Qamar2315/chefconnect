@@ -7,10 +7,7 @@ const dbConnect = () => {
     throw new Error('MongoDB connection string is not provided in the environment variables.');
   }
 
-  return mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  return mongoose.connect(mongoURI);
 };
 
 export default dbConnect;
